@@ -1,0 +1,469 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="MQTT" Id="{21864014-dc8e-46c7-90c0-1b8c2d6331ff}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MQTT
+
+VAR
+	fbMqttClient : FB_IotMqttClient;
+	bSetParameter : BOOL := TRUE;
+	bConnect : BOOL := TRUE;
+	
+	(* published message *)
+	sTopicPubTERRAS : STRING(255) := 'ToonBA?>TERRAS';
+	sTopicPubWC: STRING(255) := 'ToonBA?>WC';
+	sTopicPubLIVING : STRING(255) := 'ToonBA?>LIVING';
+	sTopicPubSLAAPKAMER1 : STRING(255) := 'ToonBA?>SLAAPKAMER1';
+	sTopicPubSLAAPKAMER2 : STRING(255) := 'ToonBA?>SLAAPKAMER2';
+	sTopicPubKEUKEN : STRING(255) := 'ToonBA?>KEUKEN';
+	sTopicPubTEMP : STRING(255) := 'ToonBA?>TEMP';
+	
+	sPayloadPub : STRING(255);
+	i: UDINT;
+	fbTimer : TON;
+	
+	sendbutton : BOOL;
+	startbutton : BOOL;
+	(* received message *)
+	
+	
+	{attribute 'TcEncoding':='UTF-8'}
+	sTopicRcv : STRING(255);
+	{attribute 'TcEncoding':='UTF-8'}
+	sPayloadRcv : STRING(255);
+	fbMessageQueue : FB_IotMqttMessageQueue;
+	fbMessage : FB_IotMqttMessage;
+	trigger : R_TRIG;
+
+	
+	
+	hrErrorOccurred : HRESULT; // contains the latest occurred error
+	valueMQTT: STRING(255);
+	sPayloadPubWC: STRING(255);
+	sPayloadPubTERRAS: STRING(255);
+	sPayloadPubKEUKEN: STRING(255);
+	sPayloadPubLIVING: STRING(255);
+	sPayloadPubSLAAPKAMER1: STRING(255);
+	sPayloadPubSLAAPKAMER2: STRING(255);
+	sPayloadPubWC1: STRING(255);
+	sPayloadPubWC2: STRING(255);
+	sPayloadPubWC3: STRING(255);
+	l: INT;
+	bSubscribed : BOOL;
+	bSubscribed2: BOOL;
+	bSubscribed3: BOOL;
+	bSubscribed4: BOOL;
+	bSubscribed5: BOOL;
+	bSubscribed6: BOOL;
+	sTopicSub1 : STRING(255) := 'ToonBA!>SLAAPKAMER1';
+	sTopicSub2 : STRING(255) := 'ToonBA!>SLAAPKAMER2';
+	sTopicSub3 : STRING(255) := 'ToonBA!>KEUKEN';
+	sTopicSub4 : STRING(255) := 'ToonBA!>WC';
+	sTopicSub5 : STRING(255) := 'ToonBA!>LIVING';
+	sTopicSub6 : STRING(255) := 'ToonBA!>TERRAS';
+	toggle : STRING(6) := 'toggle';
+	toggle1: BOOL;
+	toggle2: BOOL;
+	toggle3: BOOL;
+	toggle4: BOOL;
+	toggle5: BOOL;
+	toggle6: BOOL;
+	fbtoggle1 : TP;
+	fbtoggle2 : TP;
+	fbtoggle3 : TP;
+	fbtoggle4 : TP;
+	fbtoggle5 : TP;
+	fbtoggle6 : TP;
+
+	sPayloadPubTEMP: STRING(255);
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[trigger( CLK := sendbutton);
+
+ToggleV();
+IF main.logs THEN
+	fbtimer(in := NOT fbtimer.q,PT:=T#1M);
+END_IF
+
+
+IF bSetParameter THEN
+	bSetParameter := FALSE;
+	fbMqttClient.sHostName:= 'broker.mqttdashboard.com';
+	fbMqttClient.nHostPort:= 1883;
+//	fbMqttClient.sClientId:= 'ToonBACLIENT'; 
+//	fbMqttClient.sTopicPrefix:= 'ToonBA?'; 
+//	fbMqttClient.nKeepAlive:= 60; 
+//	fbMqttClient.sUserName:= ;
+//	fbMqttClient.sUserPassword:= ; 
+//	fbMqttClient.stWill:= ; 
+//	fbMqttClient.stTLS:= ;
+	fbMqttClient.ipMessageQueue := fbMessageQueue;
+END_IF
+
+fbMqttClient.Execute(startbutton);
+IF fbMqttClient.bError THEN
+	// add your error logging here
+	hrErrorOccurred := fbMqttClient.hrErrorCode;
+END_IF
+
+IF fbMessageQueue.nQueuedMessages > 0 THEN
+	IF fbMessageQueue.Dequeue(fbMessage:=fbMessage) THEN
+		fbMessage.GetTopic(pTopic:=ADR(sTopicRcv), nTopicSize:=SIZEOF(sTopicRcv) );
+		fbMessage.GetPayload(pPayload:=ADR(sPayloadRcv), nPayloadSize:=SIZEOF(sPayloadRcv), bSetNullTermination:=TRUE);
+		
+		togglelamps();
+		
+	
+		
+	END_IF
+END_IF
+
+IF fbMqttClient.bConnected THEN
+	//subscribe to all the topics
+	subscribe();
+
+	IF  trigger.Q  OR fbTimer.q THEN
+		sendtopics();
+	END_IF
+	IF main.temptrigger.q THEN
+		sPayloadPubTEMP := concat(concat(concat(concat(concat(CONCAT('keuken : ', TO_STRING(main.keuken.tempValue)), CONCAT(', living : ', TO_STRING(main.living.tempvalue))),CONCAT(', wc : ', TO_STRING(main.wc.tempvalue))),CONCAT(', slaapkamer1 : ', TO_STRING(main.slaapkamer1.tempvalue))),CONCAT(', slaapkamer2 : ', TO_STRING(main.slaapkamer2.tempvalue))),CONCAT(', terras : ', TO_STRING(main.terras.tempvalue)));
+		
+		fbMqttClient.Publish(	sTopic:= sTopicPubtemp, 
+								pPayload:= ADR(sPayloadPubTEMP), nPayloadSize:= LEN2(ADR(sPayloadPubTEMP)), 
+								eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+		IF fbMqttClient.bError THEN
+			// add your error logging here
+			hrErrorOccurred := fbMqttClient.hrErrorCode;
+		END_IF
+	END_IF
+	
+	// trigger for events and send values from what room triggered event
+	
+	IF  main.trig.q THEN 
+		
+		
+	IF var1 = 1 THEN
+		// SEND WC DATA //
+		// SEND WC DATA //
+		sPayloadPubWC := concat(concat(CONCAT('CHAUFFAGE = ', TO_STRING(main.wc.chauffage)), CONCAT(', TEMP = ', TO_STRING(main.wc.tempvalue))),CONCAT(', LAMP1 = ', TO_STRING(main.wc.Lamp1)));
+		
+		fbMqttClient.Publish(	sTopic:= sTopicPubWC, 
+								pPayload:= ADR(sPayloadPubWC), nPayloadSize:= LEN2(ADR(sPayloadPubWC)), 
+								eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+		IF fbMqttClient.bError THEN
+			// add your error logging here
+			hrErrorOccurred := fbMqttClient.hrErrorCode;
+		END_IF
+	ELSIF var1 = 2 THEN
+		// SEND KEUKEN DATA //
+			// SEND KEUKEN DATA //
+			sPayloadPubKEUKEN := concat(concat(CONCAT('CHAUFFAGE = ', TO_STRING(main.KEUKEN.chauffage)), CONCAT(', TEMP = ', TO_STRING(main.KEUKEN.tempvalue))),CONCAT(', LAMP1 = ', TO_STRING(main.KEUKEN.Lamp1)));
+			
+			fbMqttClient.Publish(	sTopic:= sTopicPubKEUKEN, 
+									pPayload:= ADR(sPayloadPubKEUKEN), nPayloadSize:= LEN2(ADR(sPayloadPubKEUKEN)), 
+									eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+			IF fbMqttClient.bError THEN
+				// add your error logging here
+				hrErrorOccurred := fbMqttClient.hrErrorCode;
+			END_IF
+		
+	ELSIF var1 = 3 THEN
+		// SEND LIVING DATA //
+			// SEND LIVING DATA //
+			sPayloadPubLIVING := concat(concat(CONCAT('CHAUFFAGE = ', TO_STRING(main.LIVING.chauffage)), CONCAT(', TEMP = ', TO_STRING(main.LIVING.tempvalue))),CONCAT(', LAMP1 = ', TO_STRING(main.LIVING.Lamp1)));
+			
+			fbMqttClient.Publish(	sTopic:= sTopicPubLIVING, 
+									pPayload:= ADR(sPayloadPubLIVING), nPayloadSize:= LEN2(ADR(sPayloadPubLIVING)), 
+									eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+			IF fbMqttClient.bError THEN
+				// add your error logging here
+				hrErrorOccurred := fbMqttClient.hrErrorCode;
+			END_IF
+		
+	ELSIF var1 = 4 THEN
+		// SEND SLAAPKAMER1 DATA //
+			// SEND SLAAPKAMER1 DATA //
+			
+			
+			sPayloadPubSLAAPKAMER1 := concat(concat(CONCAT('CHAUFFAGE = ', TO_STRING(main.SLAAPKAMER1.chauffage)), CONCAT(', TEMP = ', TO_STRING(main.SLAAPKAMER1.tempvalue))),CONCAT(', LAMP1 = ', TO_STRING(main.SLAAPKAMER1.Lamp1)));
+			
+			fbMqttClient.Publish(	sTopic:= sTopicPubSLAAPKAMER1, 
+									pPayload:= ADR(sPayloadPubSLAAPKAMER1), nPayloadSize:= LEN2(ADR(sPayloadPubSLAAPKAMER1)), 
+									eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+			IF fbMqttClient.bError THEN
+				// add your error logging here
+				hrErrorOccurred := fbMqttClient.hrErrorCode;
+			END_IF
+	ELSIF var1 = 5 THEN
+		// SEND SLAAPKAMER2 DATA //
+			// SEND SLAAPKAMER2 DATA //
+			
+			
+			sPayloadPubSLAAPKAMER2 := concat(concat(CONCAT('CHAUFFAGE = ', TO_STRING(main.SLAAPKAMER2.chauffage)), CONCAT(', TEMP = ', TO_STRING(main.SLAAPKAMER2.tempvalue))),CONCAT(', LAMP1 = ', TO_STRING(main.SLAAPKAMER2.Lamp1)));
+			
+			fbMqttClient.Publish(	sTopic:= sTopicPubSLAAPKAMER2, 
+									pPayload:= ADR(sPayloadPubSLAAPKAMER2), nPayloadSize:= LEN2(ADR(sPayloadPubSLAAPKAMER2)), 
+									eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+			IF fbMqttClient.bError THEN
+				// add your error logging here
+				hrErrorOccurred := fbMqttClient.hrErrorCode;
+			END_IF
+		
+	ELSIF var1 = 6 THEN	
+		// SEND TERRAS DATA //
+			// SEND TERRAS DATA //
+			
+			
+			sPayloadPubTERRAS := concat(concat(CONCAT('watersproeier = ', TO_STRING(main.TERRAS.watersproeier)), CONCAT(', TEMP = ', TO_STRING(main.TERRAS.tempvalue))),CONCAT(', LAMP1 = ', TO_STRING(main.TERRAS.Lamp1)));
+			
+			fbMqttClient.Publish(	sTopic:= sTopicPubTERRAS, 
+									pPayload:= ADR(sPayloadPubTERRAS), nPayloadSize:= LEN2(ADR(sPayloadPubTERRAS)), 
+									eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+			IF fbMqttClient.bError THEN
+				// add your error logging here
+				hrErrorOccurred := fbMqttClient.hrErrorCode;
+			END_IF
+		
+		
+		
+		
+END_IF
+	END_IF
+END_IF]]></ST>
+    </Implementation>
+    <Action Name="sendtopics" Id="{c19552c4-ac5c-4c57-a430-823ae4262ace}">
+      <Implementation>
+        <ST><![CDATA[	
+		// SEND WC DATA //
+		// SEND WC DATA //
+		sPayloadPubWC := concat(concat(CONCAT('CHAUFFAGE = ', TO_STRING(main.wc.chauffage)), CONCAT(', TEMP = ', TO_STRING(main.wc.tempvalue))),CONCAT(', LAMP1 = ', TO_STRING(main.wc.Lamp1)));
+		
+		fbMqttClient.Publish(	sTopic:= sTopicPubWC, 
+								pPayload:= ADR(sPayloadPubWC), nPayloadSize:= LEN2(ADR(sPayloadPubWC)), 
+								eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+		IF fbMqttClient.bError THEN
+			// add your error logging here
+			hrErrorOccurred := fbMqttClient.hrErrorCode;
+		END_IF
+		
+		// SEND KEUKEN DATA //
+		// SEND KEUKEN DATA //
+		sPayloadPubKEUKEN := concat(concat(CONCAT('CHAUFFAGE = ', TO_STRING(main.KEUKEN.chauffage)), CONCAT(', TEMP = ', TO_STRING(main.KEUKEN.tempvalue))),CONCAT(', LAMP1 = ', TO_STRING(main.KEUKEN.Lamp1)));
+		
+		fbMqttClient.Publish(	sTopic:= sTopicPubKEUKEN, 
+								pPayload:= ADR(sPayloadPubKEUKEN), nPayloadSize:= LEN2(ADR(sPayloadPubKEUKEN)), 
+								eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+		IF fbMqttClient.bError THEN
+			// add your error logging here
+			hrErrorOccurred := fbMqttClient.hrErrorCode;
+		END_IF
+		// SEND LIVING DATA //
+		// SEND LIVING DATA //
+		sPayloadPubLIVING := concat(concat(CONCAT('CHAUFFAGE = ', TO_STRING(main.LIVING.chauffage)), CONCAT(', TEMP = ', TO_STRING(main.LIVING.tempvalue))),CONCAT(', LAMP1 = ', TO_STRING(main.LIVING.Lamp1)));
+		
+		fbMqttClient.Publish(	sTopic:= sTopicPubLIVING, 
+								pPayload:= ADR(sPayloadPubLIVING), nPayloadSize:= LEN2(ADR(sPayloadPubLIVING)), 
+								eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+		IF fbMqttClient.bError THEN
+			// add your error logging here
+			hrErrorOccurred := fbMqttClient.hrErrorCode;
+		END_IF
+		
+		// SEND SLAAPKAMER1 DATA //
+		// SEND SLAAPKAMER1 DATA //
+		
+		
+		sPayloadPubSLAAPKAMER1 := concat(concat(CONCAT('CHAUFFAGE = ', TO_STRING(main.SLAAPKAMER1.chauffage)), CONCAT(', TEMP = ', TO_STRING(main.SLAAPKAMER1.tempvalue))),CONCAT(', LAMP1 = ', TO_STRING(main.SLAAPKAMER1.Lamp1)));
+		
+		fbMqttClient.Publish(	sTopic:= sTopicPubSLAAPKAMER1, 
+								pPayload:= ADR(sPayloadPubSLAAPKAMER1), nPayloadSize:= LEN2(ADR(sPayloadPubSLAAPKAMER1)), 
+								eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+		IF fbMqttClient.bError THEN
+			// add your error logging here
+			hrErrorOccurred := fbMqttClient.hrErrorCode;
+		END_IF
+		
+	
+		
+		// SEND SLAAPKAMER2 DATA //
+		// SEND SLAAPKAMER2 DATA //
+		
+		
+		sPayloadPubSLAAPKAMER2 := concat(concat(CONCAT('CHAUFFAGE = ', TO_STRING(main.SLAAPKAMER2.chauffage)), CONCAT(', TEMP = ', TO_STRING(main.SLAAPKAMER2.tempvalue))),CONCAT(', LAMP1 = ', TO_STRING(main.SLAAPKAMER2.Lamp1)));
+		
+		fbMqttClient.Publish(	sTopic:= sTopicPubSLAAPKAMER2, 
+								pPayload:= ADR(sPayloadPubSLAAPKAMER2), nPayloadSize:= LEN2(ADR(sPayloadPubSLAAPKAMER2)), 
+								eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+		IF fbMqttClient.bError THEN
+			// add your error logging here
+			hrErrorOccurred := fbMqttClient.hrErrorCode;
+		END_IF
+		
+		// SEND TERRAS DATA //
+		// SEND TERRAS DATA //
+		
+		
+		sPayloadPubTERRAS := concat(concat(CONCAT('watersproeier = ', TO_STRING(main.TERRAS.watersproeier)), CONCAT(', TEMP = ', TO_STRING(main.TERRAS.tempvalue))),CONCAT(', LAMP1 = ', TO_STRING(main.TERRAS.Lamp1)));
+		
+		fbMqttClient.Publish(	sTopic:= sTopicPubTERRAS, 
+								pPayload:= ADR(sPayloadPubTERRAS), nPayloadSize:= LEN2(ADR(sPayloadPubTERRAS)), 
+								eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+		IF fbMqttClient.bError THEN
+			// add your error logging here
+			hrErrorOccurred := fbMqttClient.hrErrorCode;
+		END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="Subscribe" Id="{ab965f11-a989-4a02-a5ac-526801aff276}">
+      <Implementation>
+        <ST><![CDATA[IF NOT bSubscribed THEN
+		bSubscribed := fbMqttClient.Subscribe(sTopic:=sTopicSub1, eQoS:=TcIotMqttQos.AtMostOnceDelivery);
+		IF fbMqttClient.bError THEN
+			// add your error logging here
+			hrErrorOccurred := fbMqttClient.hrErrorCode;
+		END_IF
+	END_IF
+	IF NOT bSubscribed2 THEN
+		bSubscribed2 := fbMqttClient.Subscribe(sTopic:=sTopicSub2, eQoS:=TcIotMqttQos.AtMostOnceDelivery);
+		IF fbMqttClient.bError THEN
+			// add your error logging here
+			hrErrorOccurred := fbMqttClient.hrErrorCode;
+		END_IF
+	END_IF
+	IF NOT bSubscribed3 THEN
+		bSubscribed3 := fbMqttClient.Subscribe(sTopic:=sTopicSub3, eQoS:=TcIotMqttQos.AtMostOnceDelivery);
+		IF fbMqttClient.bError THEN
+			// add your error logging here
+			hrErrorOccurred := fbMqttClient.hrErrorCode;
+		END_IF
+	END_IF
+	IF NOT bSubscribed4 THEN
+		bSubscribed4 := fbMqttClient.Subscribe(sTopic:=sTopicSub4, eQoS:=TcIotMqttQos.AtMostOnceDelivery);
+		IF fbMqttClient.bError THEN
+			// add your error logging here
+			hrErrorOccurred := fbMqttClient.hrErrorCode;
+		END_IF
+	END_IF
+	IF NOT bSubscribed5 THEN
+		bSubscribed5 := fbMqttClient.Subscribe(sTopic:=sTopicSub5, eQoS:=TcIotMqttQos.AtMostOnceDelivery);
+		IF fbMqttClient.bError THEN
+			// add your error logging here
+			hrErrorOccurred := fbMqttClient.hrErrorCode;
+		END_IF
+	END_IF
+	IF NOT bSubscribed6 THEN
+		bSubscribed6 := fbMqttClient.Subscribe(sTopic:=sTopicSub6, eQoS:=TcIotMqttQos.AtMostOnceDelivery);
+		IF fbMqttClient.bError THEN
+			// add your error logging here
+			hrErrorOccurred := fbMqttClient.hrErrorCode;
+		END_IF
+	END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="ToggleLamps" Id="{6944400c-7cb2-4df2-a6d5-04dc81718b90}">
+      <Implementation>
+        <ST><![CDATA[IF sTopicRcv = sTopicSub1 THEN
+			IF sPayloadRcv = toggle THEN				
+					toggle1 := TRUE;					
+			END_IF
+		ELSIF sTopicRcv = sTopicSub2 THEN
+			IF sPayloadRcv = toggle THEN				
+					toggle2 := TRUE;					
+			END_IF
+		ELSIF sTopicRcv = sTopicSub3 THEN
+			IF sPayloadRcv = toggle THEN				
+					toggle3 := TRUE;					
+			END_IF
+		ELSIF sTopicRcv = sTopicSub4 THEN
+			IF sPayloadRcv = toggle THEN				
+					toggle4 := TRUE;					
+			END_IF
+		ELSIF sTopicRcv = sTopicSub5 THEN
+			IF sPayloadRcv = toggle THEN				
+					toggle5 := TRUE;					
+			END_IF
+		ELSIF sTopicRcv = sTopicSub6 THEN
+			IF sPayloadRcv = toggle THEN				
+					toggle6 := TRUE;					
+			END_IF			
+		END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="ToggleV" Id="{76896829-8464-4d4b-954c-708b356fe08c}">
+      <Implementation>
+        <ST><![CDATA[fbtoggle1(in := toggle1);
+fbtoggle2(in := toggle2);
+fbtoggle3(in := toggle3);
+fbtoggle4(in := toggle4);
+fbtoggle5(in := toggle5);
+fbtoggle6(in := toggle6);
+IF fbtoggle1.Q THEN 
+	toggle1 := FALSE;
+END_IF
+IF fbtoggle2.Q THEN 
+	toggle2 := FALSE;
+END_IF
+IF fbtoggle3.Q THEN 
+	toggle3 := FALSE;
+END_IF
+IF fbtoggle4.Q THEN 
+	toggle4 := FALSE;
+END_IF
+IF fbtoggle5.Q THEN 
+	toggle5 := FALSE;
+END_IF
+IF fbtoggle6.Q THEN 
+	toggle6 := FALSE;
+END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <LineIds Name="MQTT">
+      <LineId Id="81" Count="0" />
+      <LineId Id="487" Count="0" />
+      <LineId Id="512" Count="0" />
+      <LineId Id="349" Count="2" />
+      <LineId Id="348" Count="0" />
+      <LineId Id="347" Count="0" />
+      <LineId Id="6" Count="24" />
+      <LineId Id="410" Count="0" />
+      <LineId Id="357" Count="0" />
+      <LineId Id="352" Count="0" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="31" Count="2" />
+      <LineId Id="535" Count="0" />
+      <LineId Id="399" Count="0" />
+      <LineId Id="368" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="344" Count="1" />
+      <LineId Id="541" Count="0" />
+      <LineId Id="544" Count="7" />
+      <LineId Id="542" Count="1" />
+      <LineId Id="536" Count="2" />
+      <LineId Id="42" Count="1" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="257" Count="81" />
+      <LineId Id="341" Count="2" />
+      <LineId Id="135" Count="0" />
+      <LineId Id="53" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="MQTT.sendtopics">
+      <LineId Id="2" Count="77" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="MQTT.Subscribe">
+      <LineId Id="2" Count="40" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="MQTT.ToggleLamps">
+      <LineId Id="2" Count="23" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="MQTT.ToggleV">
+      <LineId Id="2" Count="22" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="MAIN" Id="{1e04930d-3dc9-456e-a7a5-1ca57d91aa02}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+
+	
+	slaapkamerLamp2 : BOOL;
+	ingesteldeTemp : INT := 20;
+	temp : BOOL;
+	chauffageOn : bool;
+	
+	living : kamers;
+	wc : Kamers;
+	keuken : Kamers;	
+	terras : terras1;
+	
+	csvOpen : FB_FileOpen;	
+	bGetOpenWeatherMap 				: BOOL;
+	fbHttpClientOpenWeatherMap		: FB_IotHttpClient :=(sHostName:='api.openweathermap.org',
+								  	bKeepAlive:=TRUE,	tConnectionTimeout:=T#10S);	
+	GetValues			: FB_TestHTTP_Get_openWeatherMapLat;
+	
+	logs : BOOL := FALSE;
+    trig : R_TRIG;
+	chaufageTrig : R_trig;
+	toggleEvent: BOOL;
+	temptrigger : ton;
+
+	
+END_VAR
+VAR_INPUT
+	slaapkamer1 : Kamers;
+	slaapkamer2 : Kamers;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//init client parameters at startup
+// init client parameters at startup
+temptrigger(in := NOT temptrigger.q, pt := T#1M);
+GetTemp();
+lights();
+chauffage();
+watersproeier();
+csvwrite();
+MQTT();
+eventtest();
+
+
+
+
+]]></ST>
+    </Implementation>
+    <Action Name="chauffage" Id="{67d79ed3-6e12-44e4-a02b-cdd127197e18}">
+      <Implementation>
+        <ST><![CDATA[
+IF 	chauffageOn THEN 
+	IF ( slaapkamer1.tempValue < (ingesteldeTemp -1))
+			THEN
+			slaapkamer1.chauffage := TRUE;
+		ELSIF ( slaapkamer1.tempValue > (ingesteldeTemp + 1))
+			THEN
+			slaapkamer1.chauffage := FALSE;
+		END_IF
+		
+		
+	IF ( slaapkamer2.tempValue < (ingesteldeTemp -1))
+			THEN
+			slaapkamer2.chauffage := TRUE;
+		ELSIF ( slaapkamer2.tempValue > (ingesteldeTemp + 1))
+			THEN
+			slaapkamer2.chauffage := FALSE;
+		END_IF
+		
+	IF ( wc.tempValue < (ingesteldeTemp -1))
+			THEN
+			wc.chauffage := TRUE;
+		ELSIF ( wc.tempValue > (ingesteldeTemp + 1))
+			THEN
+			wc.chauffage := FALSE;
+		END_IF
+		
+	IF ( living.tempValue < (ingesteldeTemp -1))
+			THEN
+			living.chauffage := TRUE;
+		ELSIF ( living.tempValue > (ingesteldeTemp + 1))
+			THEN
+			living.chauffage := FALSE;
+		END_IF
+		
+	IF ( keuken.tempValue < (ingesteldeTemp -1))
+			THEN
+		keuken.chauffage := TRUE;
+	ELSIF ( keuken.tempValue > (ingesteldeTemp + 1))
+		THEN
+		keuken.chauffage := FALSE;
+	END_IF
+ELSE
+ 	keuken.chauffage := FALSE;
+	slaapkamer1.chauffage := FALSE;
+	slaapkamer2.chauffage := FALSE;
+	wc.chauffage := FALSE;
+	living.chauffage := FALSE;
+END_IF
+	
+	
+	
+]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="EventTest" Id="{46c1f240-8293-4f89-8f29-fc6811d8ba16}">
+      <Implementation>
+        <ST><![CDATA[trig(clk := toggleEvent);
+IF slaapkamer1.schakelaar THEN 
+	var1 := 4;
+	toggleEvent := TRUE;
+ELSIF slaapkamer2.schakelaar THEN 
+	var1 := 5;
+	toggleEvent := TRUE;
+ELSIF living.schakelaar THEN 
+	var1 := 3;
+	toggleEvent := TRUE;
+ELSIF wc.schakelaar THEN 
+	var1 := 1;
+	toggleEvent := TRUE;
+ELSIF terras.schakelaar THEN 
+	var1 := 6;
+	toggleEvent := TRUE;
+ELSIF keuken.schakelaar THEN 
+	var1 := 2;
+	toggleEvent := TRUE;
+ELSE
+	toggleevent := FALSE;
+END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="GetTemp" Id="{03919a02-da3f-46cb-9ef3-e250f1a60b0b}">
+      <Implementation>
+        <ST><![CDATA[IF NOT fbHttpClientOpenWeatherMap.bConfigured THEN 
+	fbHttpClientOpenWeatherMap.nHostPort:= 443;
+	fbHttpClientOpenWeatherMap.stTLS.bNoServerCertCheck:= TRUE;
+END_IF
+
+IF fbHttpClientOpenWeatherMap.bConfigured THEN
+	GetValues(bSend:=bGetOpenWeatherMap, fbClient:=fbHttpClientOpenWeatherMap);
+ 	
+END_IF
+
+fbHttpClientOpenWeatherMap.Execute();]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="lights" Id="{4369716a-de06-4342-91d0-a173b5e4e555}">
+      <Implementation>
+        <ST><![CDATA[slaapkamer1.lightToggle( btoggle := slaapkamer1.schakelaar OR mqtt.fbtoggle1.Q , blight => slaapkamer1.Lamp1);
+slaapkamer2.lightToggle( btoggle := slaapkamer2.schakelaar OR mqtt.fbtoggle2.q , blight => slaapkamer2.Lamp1);
+keuken.lightToggle( btoggle := keuken.schakelaar OR mqtt.fbtoggle3.q , blight => keuken.Lamp1);
+
+wc.lightToggle( btoggle := wc.schakelaar OR mqtt.fbtoggle4.q , blight => wc.Lamp1);
+living.lightToggle( btoggle := living.schakelaar OR mqtt.fbtoggle5.q , blight => living.Lamp1);
+terras.lightToggle( btoggle := terras.schakelaar OR mqtt.fbtoggle6.q , blight => terras.Lamp1);
+]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="watersproeier" Id="{a4be52bb-0a18-41d3-9f0a-a6dd8ab2f785}">
+      <Implementation>
+        <ST><![CDATA[IF terras.tempValue > 25 THEN
+	terras.watersproeier := TRUE;
+ELSE 
+	terras.watersproeier := FALSE;
+END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <LineIds Name="MAIN">
+      <LineId Id="144" Count="1" />
+      <LineId Id="247" Count="0" />
+      <LineId Id="126" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="192" Count="0" />
+      <LineId Id="125" Count="0" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="218" Count="0" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="96" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="38" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.chauffage">
+      <LineId Id="92" Count="0" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="47" Count="32" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="82" Count="4" />
+      <LineId Id="80" Count="1" />
+      <LineId Id="87" Count="4" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="41" Count="1" />
+    </LineIds>
+    <LineIds Name="MAIN.EventTest">
+      <LineId Id="10" Count="0" />
+      <LineId Id="1" Count="1" />
+      <LineId Id="4" Count="3" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="16" Count="1" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="19" Count="1" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="22" Count="1" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="24" Count="1" />
+      <LineId Id="3" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.GetTemp">
+      <LineId Id="2" Count="9" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.lights">
+      <LineId Id="2" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="3" Count="3" />
+      <LineId Id="1" Count="0" />
+      <LineId Id="8" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.watersproeier">
+      <LineId Id="1" Count="1" />
+      <LineId Id="4" Count="1" />
+      <LineId Id="3" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

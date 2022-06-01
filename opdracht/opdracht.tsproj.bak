@@ -1,0 +1,359 @@
+<?xml version="1.0"?>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.22">
+	<DataTypes>
+		<DataType>
+			<Name GUID="{2822984B-C983-4ADC-B5DA-B7B8164F9BCF}" Namespace="Tc3_LS.Tc2_DALI" AutoDeleteType="true">ST_KL6821InData</Name>
+			<Comment><![CDATA[ Communication interface for the KL6821]]></Comment>
+			<BitSize>48</BitSize>
+			<SubItem>
+				<Name>nStatus</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>arrData</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>4</Elements>
+				</ArrayInfo>
+				<BitSize>32</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{401169AD-6DE6-0C56-5DA7-3AB73BED19E9}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..4] OF Tc3_LS.Tc2_DALI.ST_KL6821InData</Name>
+			<BitSize>192</BitSize>
+			<BaseType GUID="{2822984B-C983-4ADC-B5DA-B7B8164F9BCF}" Namespace="Tc3_LS.Tc2_DALI">ST_KL6821InData</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>4</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{FEB96C23-0E04-CC01-F84E-3246D8F89D97}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..100] OF BOOL</Name>
+			<BitSize>800</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>100</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{79B32E7B-2A11-1E60-4346-30C160C21204}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..4,0..63] OF BOOL</Name>
+			<BitSize>2048</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>4</Elements>
+			</ArrayInfo>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>64</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{7CEC7DF3-31F0-7D10-1478-B922001E366F}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..4,0..63] OF INT</Name>
+			<BitSize>4096</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>4</Elements>
+			</ArrayInfo>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>64</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{4AA6F815-3F8D-2830-7BB2-4B3FB16F90B8}" Namespace="Tc3_LS" AutoDeleteType="true">ST_KL3403_IN</Name>
+			<BitSize>96</BitSize>
+			<SubItem>
+				<Name>SB1</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<Comment><![CDATA[In the process image, the KL3403 is represented at least with 9 bytes of input data.]]></Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>nDummy1</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>8</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>DataIN1</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>SB2</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>32</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>nDummy2</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>40</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>DataIN2</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>48</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>SB3</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>64</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>nDummy3</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>72</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>DataIN3</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>80</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{2354AFE6-D8A4-6CDC-3714-E95DA1965141}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..15] OF Tc3_LS.ST_KL3403_IN</Name>
+			<BitSize>1440</BitSize>
+			<BaseType GUID="{4AA6F815-3F8D-2830-7BB2-4B3FB16F90B8}" Namespace="Tc3_LS">ST_KL3403_IN</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>15</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{8F80D870-ECA8-1623-DF60-4667BB8AEDB7}" Namespace="Tc3_LS.Tc2_DALI" AutoDeleteType="true">ST_KL6821OutData</Name>
+			<Comment><![CDATA[ Communication interface for the KL6821]]></Comment>
+			<BitSize>48</BitSize>
+			<SubItem>
+				<Name>nCtrl</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>arrData</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>4</Elements>
+				</ArrayInfo>
+				<BitSize>32</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{A655278A-11D7-C5E5-B9E0-B71CF4B6C119}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..4] OF Tc3_LS.Tc2_DALI.ST_KL6821OutData</Name>
+			<BitSize>192</BitSize>
+			<BaseType GUID="{8F80D870-ECA8-1623-DF60-4667BB8AEDB7}" Namespace="Tc3_LS.Tc2_DALI">ST_KL6821OutData</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>4</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{F3A39498-06C6-469C-1558-A04E15649880}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..50] OF BOOL</Name>
+			<BitSize>400</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>50</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{3959AF2B-712F-4776-B31A-F615A7A6D72D}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..50] OF INT</Name>
+			<BitSize>800</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>50</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{6C954319-4943-3EF0-FC98-9B33B92F7931}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..50] OF BYTE</Name>
+			<BitSize>400</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>50</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{4B3A0A58-6B5B-3B43-4F96-B1CBFA1C45ED}" Namespace="Tc3_LS" AutoDeleteType="true">ST_KL3403_OUT</Name>
+			<BitSize>96</BitSize>
+			<SubItem>
+				<Name>CB1</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<Comment><![CDATA[In the process image, the KL3403 is represented at least with 9 bytes of output data.]]></Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>nDummy1</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>8</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>DataOut1</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>CB2</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>32</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>nDummy2</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>40</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>DataOut2</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>48</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>CB3</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>64</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>nDummy3</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>72</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>DataOut3</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>80</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{3EF2949A-3755-770A-860B-AA802882FEEB}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..15] OF Tc3_LS.ST_KL3403_OUT</Name>
+			<BitSize>1440</BitSize>
+			<BaseType GUID="{4B3A0A58-6B5B-3B43-4F96-B1CBFA1C45ED}" Namespace="Tc3_LS">ST_KL3403_OUT</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>15</Elements>
+			</ArrayInfo>
+		</DataType>
+	</DataTypes>
+	<Project ProjectGUID="{395976E1-93E3-461F-99F2-24D8444F7232}" Target64Bit="true" ShowHideConfigurations="#x106">
+		<System>
+			<Tasks>
+				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
+					<Name>PlcTask</Name>
+				</Task>
+			</Tasks>
+		</System>
+		<Plc>
+			<Project GUID="{896516D1-2E7E-40E5-B1EF-656B3B8C8D9E}" Name="opdracht" PrjFilePath="opdracht\opdracht.plcproj" TmcFilePath="opdracht\opdracht.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="opdracht\opdracht.tmc">
+					<Name>opdracht Instance</Name>
+					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+					<Vars VarGrpType="1">
+						<Name>PlcTask Inputs</Name>
+						<Var>
+							<Name>GVL_LS_IO.stDali_In</Name>
+							<Type GUID="{401169AD-6DE6-0C56-5DA7-3AB73BED19E9}">ARRAY [1..4] OF Tc3_LS.Tc2_DALI.ST_KL6821InData</Type>
+						</Var>
+						<Var>
+							<Name>GVL_LS_IO.bSwitch</Name>
+							<Type GUID="{FEB96C23-0E04-CC01-F84E-3246D8F89D97}">ARRAY [1..100] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL_LS_IO.bIn_Sensor_Presence</Name>
+							<Comment><![CDATA[ Extern mode for sensors: presence	]]></Comment>
+							<Type GUID="{79B32E7B-2A11-1E60-4346-30C160C21204}">ARRAY [1..4,0..63] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL_LS_IO.nIn_Sensor_Brightness</Name>
+							<Comment><![CDATA[ Extern mode for sensors: brightness	]]></Comment>
+							<Type GUID="{7CEC7DF3-31F0-7D10-1478-B922001E366F}">ARRAY [1..4,0..63] OF INT</Type>
+						</Var>
+						<Var>
+							<Name>GVL_LS_IO.stIn_KL3403</Name>
+							<Type GUID="{2354AFE6-D8A4-6CDC-3714-E95DA1965141}">ARRAY [1..15] OF Tc3_LS.ST_KL3403_IN</Type>
+						</Var>
+					</Vars>
+					<Vars VarGrpType="2" AreaNo="1">
+						<Name>PlcTask Outputs</Name>
+						<Var>
+							<Name>GVL_LS_IO.bSoft_Error</Name>
+							<Comment><![CDATA[ Potential free Contacs for management systems]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL_LS_IO.bHard_Error</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL_LS_IO.stDali_Out</Name>
+							<Type GUID="{A655278A-11D7-C5E5-B9E0-B71CF4B6C119}">ARRAY [1..4] OF Tc3_LS.Tc2_DALI.ST_KL6821OutData</Type>
+						</Var>
+						<Var>
+							<Name>GVL_LS_IO.bSwitch_FB</Name>
+							<Type GUID="{FEB96C23-0E04-CC01-F84E-3246D8F89D97}">ARRAY [1..100] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL_LS_IO.bCircuit</Name>
+							<Type GUID="{F3A39498-06C6-469C-1558-A04E15649880}">ARRAY [1..50] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL_LS_IO.nCircuit_Percent</Name>
+							<Type GUID="{3959AF2B-712F-4776-B31A-F615A7A6D72D}">ARRAY [1..50] OF INT</Type>
+						</Var>
+						<Var>
+							<Name>GVL_LS_IO.nCircuit_analog</Name>
+							<Type GUID="{3959AF2B-712F-4776-B31A-F615A7A6D72D}">ARRAY [1..50] OF INT</Type>
+						</Var>
+						<Var>
+							<Name>GVL_LS_IO.nCircuit_DMX</Name>
+							<Type GUID="{6C954319-4943-3EF0-FC98-9B33B92F7931}">ARRAY [1..50] OF BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL_LS_IO.stOut_KL3403</Name>
+							<Type GUID="{3EF2949A-3755-770A-860B-AA802882FEEB}">ARRAY [1..15] OF Tc3_LS.ST_KL3403_OUT</Type>
+						</Var>
+					</Vars>
+					<Contexts>
+						<Context>
+							<Id NeedCalleeCall="true">0</Id>
+							<Name>PlcTask</Name>
+							<ManualConfig>
+								<OTCID>#x02010030</OTCID>
+							</ManualConfig>
+							<Priority>20</Priority>
+							<CycleTime>10000000</CycleTime>
+						</Context>
+					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+					</TaskPouOids>
+				</Instance>
+			</Project>
+		</Plc>
+	</Project>
+</TcSmProject>

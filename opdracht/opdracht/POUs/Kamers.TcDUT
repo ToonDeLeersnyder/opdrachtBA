@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="Kamers" Id="{f954af36-81e2-4a28-bb47-574691b275ea}">
+    <Declaration><![CDATA[TYPE Kamers :
+STRUCT
+	Lamp1 : BOOL;
+	schakelaar : BOOL;	
+	tempValue : INT := 21;
+	lightToggle : FB_Light;
+	chauffage : bool;
+END_STRUCT
+END_TYPE
+
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

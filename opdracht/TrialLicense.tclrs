@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<TcLicenseInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2011/11/TcLicenseInfo">
+	<LicenseInfo>
+		<SystemId>{8C349FAE-CD5A-465C-8FC5-A0F2AE117E4E}</SystemId>
+		<IssueTime>2022-05-26T17:38:00</IssueTime>
+		<ExpireTime>2022-06-03T00:00:00</ExpireTime>
+		<LicenseKey>ac60ee60f18f4bb8d038e256ce2da30d405bf45816a2ec38ebe37d299dd4bef10e9b940ec0ddf6caddb131c1c2773756ad94f02401b10544c4f396ba0ec89da2391f078dcfbbcab8e6aa5e6dfc7cb4c9bd95f2d6f16e9605fa60c08985856977f45fadbeceb72c468cf1b9608715735a97a024bda5431a70ee853e438b181597a3c5e8199db2823f31813225b96b1b3da681cd698df31232c1aed973cfdaeb7f7dfb00c17b05bafa3f85d8a9a6227af9124b040d061307b0033eebbaaa5b1c7a2d7d6efbfc26a22b6db787e355b4f14a839f55e7fbcd29b85799d5ef5b38b7ebca2c41127700e6dcc6fd963b06dbcd6b130ae51cf9d6b208f26dfdfebf41485b</LicenseKey>
+		<License>
+			<LicenseId>{973BA0B1-AADD-41C1-B518-302802473922}</LicenseId>
+			<Name>TC3 IoT MQTT Protocol</Name>
+		</License>
+		<License>
+			<LicenseId>{0ABFD2B0-EAE1-4DC7-AABE-03093B0786B7}</LicenseId>
+			<Name>TC3 IoT Communication (MQTT)</Name>
+			<OrderNo>TF6701</OrderNo>
+		</License>
+		<License>
+			<LicenseId>{461F547B-9F81-4C4D-8BE6-01F8B3B14C86}</LicenseId>
+			<Name>TC3 Building Automation Basic</Name>
+			<OrderNo>TF8010</OrderNo>
+		</License>
+		<License>
+			<LicenseId>{4C256767-E6E6-4AF5-BD68-9F7ABAD0C200}</LicenseId>
+			<Name>TC3 ADS</Name>
+			<OrderNo>TC1000</OrderNo>
+		</License>
+		<License>
+			<LicenseId>{094750FD-A1AB-4B28-8DE8-8B6CACD0EDE6}</LicenseId>
+			<Name>TC3 Light Solution</Name>
+			<OrderNo>TF8050</OrderNo>
+		</License>
+		<License>
+			<LicenseId>{66689887-CCBD-452C-AC9A-039D997C6E66}</LicenseId>
+			<Name>TC3 PLC</Name>
+			<OrderNo>TC1200</OrderNo>
+		</License>
+		<License>
+			<LicenseId>{70A64701-DC70-4557-B425-EC0B67E22215}</LicenseId>
+			<Name>TC3 IoT HTTP Protocol</Name>
+		</License>
+		<License>
+			<LicenseId>{42E60F0D-E1AD-4B78-84B8-FD3ECF44FAA7}</LicenseId>
+			<Name>TC3 IoT HTTPS/REST</Name>
+			<OrderNo>TF6760</OrderNo>
+		</License>
+		<License>
+			<LicenseId>{3FF18E97-7754-401B-93FB-70544DE28A13}</LicenseId>
+			<Name>TC3 IO</Name>
+			<OrderNo>TC1100</OrderNo>
+		</License>
+	</LicenseInfo>
+</TcLicenseInfo>

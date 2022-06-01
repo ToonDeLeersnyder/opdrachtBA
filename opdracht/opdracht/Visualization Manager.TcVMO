@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <VisuManager Name="Visualization Manager" Id="{9c0fbe79-4adf-42cc-a82a-8ec1beddae67}">
+    <XmlArchive>
+      <Data>
+        <o xml:space="preserve" t="VisualManagerObject">
+          <v n="UseUnicodeStrings" t="UnicodeSupport">Undefined</v>
+          <o n="ViewSettings" t="VisualManagerViewSettings">
+            <n n="StartVisu" />
+            <v n="StartVisu33">"Visualization"</v>
+            <v n="OpenTargetvisu">false</v>
+            <v n="BestFit">false</v>
+            <v n="ClientSizeMode" t="VisualClientSizeMode">AutoDetect</v>
+            <v n="ClientSizeX">2000</v>
+            <v n="ClientSizeY">2000</v>
+            <v n="ExtendedSettings">false</v>
+            <v n="PaintBufferSize">50000</v>
+            <v n="MemorybufferSize">400000</v>
+            <v n="VisuInternal">false</v>
+            <v n="CurrentVisuGlobal">false</v>
+            <v n="FileTransferMode">true</v>
+            <v n="VisuStyle">"Default, 3.1.6.0 (Beckhoff Automation GmbH)"</v>
+            <v n="MaxNumOfClients">100</v>
+            <n n="Language" />
+            <v n="NumpadDialog">"VisuDialogs.Numpad"</v>
+            <v n="KeypadDialog">"VisuDialogs.Keypad"</v>
+            <v n="InputWithLimitsDialog">"VisuDialogs.TextinputWithLimits"</v>
+            <v n="UseInputWithLimits">false</v>
+            <v n="TouchHandlingActive">false</v>
+            <v n="SemiTransparentDrawingActive">true</v>
+            <v n="UpdateColorvariablesAfterActivationDone">true</v>
+            <v n="TransferSvgAndConvertedImages">false</v>
+            <v n="LoginDialog">"VisuUserManagement.VUM_Login"</v>
+            <v n="ChangePasswordDialog">"VisuUserManagement.VUM_ChangePassword"</v>
+            <v n="ChangeConfigDialog">"VisuUserManagement.VUM_UserManagement"</v>
+            <v n="GuidShowChangePasswordDialogFunction">{00000000-0000-0000-0000-000000000000}</v>
+            <v n="GuidShowChangeConfigDialogFunction">{00000000-0000-0000-0000-000000000000}</v>
+            <v n="UseStandardKeyboardHandling">true</v>
+            <v n="PaintDeactiveElementsGrayedOut">true</v>
+            <n n="GlobalOpenNumpadKeypadSettings" />
+            <v n="ConvertImages">false</v>
+            <v n="ConversionType">""</v>
+          </o>
+          <o n="RegisterDesc" t="GenericFbDescription">
+            <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
+              <v>FB_Init</v>
+              <v>1cd64a77-f48f-4bfc-b317-5566ab271ff7</v>
+              <v>FB_Reinit</v>
+              <v>93862d8a-c76c-4aa3-a14a-8c39558e1f4e</v>
+              <v>FB_Exit</v>
+              <v>70ed7a30-70a8-4e87-a113-91b5657e22a3</v>
+            </d>
+            <v n="FbName">"NotImportant"</v>
+            <v n="FbGuid">{d94305c4-fa29-460e-8d04-acc88a60a202}</v>
+          </o>
+          <o n="TargetProperties" t="VisualizationTargetProperties">
+            <n n="AvailableKeys" />
+          </o>
+          <o n="ConfiguredHotkeys" t="HotkeyConfiguration">
+            <v n="IdMin">481037385728L</v>
+            <v n="IdMax">549755813887L</v>
+            <v n="Id">481037385728L</v>
+            <v n="IdMask">549754765312L</v>
+            <v n="IdStep">1048576L</v>
+            <l2 n="Inputs" />
+          </o>
+          <o n="DefInpHandlerGuids" t="GenericFbDescription">
+            <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
+              <v>ExecuteLooseCapture</v>
+              <v>ec19885f-acba-42b8-9e30-9db2bcf54150</v>
+              <v>ExecuteMouseUp</v>
+              <v>c35f333b-ce40-41ea-9bf5-7fd1ddabaf6e</v>
+              <v>Init</v>
+              <v>dae5211d-3eff-4128-903f-74963516568a</v>
+              <v>FB_Exit</v>
+              <v>941e0b59-6482-456c-abfc-d2bea783ef64</v>
+              <v>ExecuteMouseDblClick</v>
+              <v>61003fb4-335a-4d4e-a5de-685f5640fd52</v>
+              <v>GetElementInfo</v>
+              <v>b1138f9e-e41d-4427-a9e2-0aa2664ef77c</v>
+              <v>ExecuteMouseDown</v>
+              <v>a121dc13-6bda-4efa-9722-0d6e170d6f22</v>
+              <v>FB_Reinit</v>
+              <v>2d6d9be3-4c51-4496-9f19-6a061ebaa4ab</v>
+              <v>Initialize</v>
+              <v>a856216e-6476-47d8-9184-df1ef739c8dd</v>
+              <v>ExecuteMouseMove</v>
+              <v>b5279b09-ff77-4b34-a85b-433df38a00e5</v>
+              <v>ExecuteDialogClosed</v>
+              <v>37b1a0bb-526d-4990-9b6f-788cfa86fec8</v>
+              <v>ExecuteKeyUp</v>
+              <v>9dda607f-e5e9-4d95-b941-fc416083ae9f</v>
+              <v>ExecuteKeyDown</v>
+              <v>510ad3dc-b27f-4949-8e3f-1625a977b6f0</v>
+              <v>abstrGetDefaultCursor</v>
+              <v>a58d9a57-6533-437d-8b9c-e571261e7e63</v>
+              <v>ExecuteMouseEnter</v>
+              <v>f6870d8f-1dc9-4bff-acfb-e784ecd7f829</v>
+              <v>ExecuteMouseLeave</v>
+              <v>32420693-8fef-4254-8647-f1d1acb4b2ae</v>
+              <v>FB_Init</v>
+              <v>0a3974d0-c3c4-4b08-826d-543c0821538d</v>
+              <v>ExecuteMouseClick</v>
+              <v>2f388afe-f06b-4680-a19b-d420005cee5e</v>
+            </d>
+            <v n="FbName">"NotImportant"</v>
+            <v n="FbGuid">{f8a431da-9a2b-4cd8-9a23-4cc323dafdba}</v>
+          </o>
+          <n n="InstantiationStorage" />
+          <n n="VisuUserManagement" />
+          <v n="UseLocalUserMgmt">true</v>
+          <v n="UseUserMgmtInPlc">true</v>
+          <n n="RemoteUserMgmtPath" />
+          <n n="FontsConfig" />
+          <n n="FontDownloadConfig" />
+          <n n="VisuInitializationCode" />
+          <n n="FontSettings" />
+          <v n="GuidVisuSettingsPou">{fc9065e3-f32b-48eb-88c5-10f78f15c346}</v>
+          <v n="GuidVisuSettingsPouInit">{f164b08e-d7f3-409d-a517-3c175f8618e1}</v>
+          <v n="GuidVisuSettingsPouReInit">{491ba8d4-749b-478b-bd01-b28bca5d6915}</v>
+          <v n="GuidVisuSettingsPouBoolMethod">{6e53ded6-7c89-4f23-9771-a1b7b00fecd5}</v>
+          <v n="GuidVisuSettingsPouDIntMethod">{627d2775-5ff7-446a-bbb7-b1ccdf2476af}</v>
+          <v n="GuidVisuSettingsPouStringMethod">{94ba0f38-8920-461e-a90d-c8c4281c1bcc}</v>
+          <v n="GuidVisuSettingsPouReservedMethod">{c06ac616-cec5-432b-af5f-3c1e58bfa984}</v>
+          <v n="GuidMemManInitPou">{5d0a6b2d-3c7c-4628-b99c-613950618f0d}</v>
+          <v n="GuidMemManInitPouInit">{1a270804-0bda-4979-8f26-23d839953d72}</v>
+          <v n="GuidMemManInitPouReInit">{8b0c6bb0-580b-4822-9c1e-09335b43f466}</v>
+          <v n="GuidStartVisuInitPou">{d8a606f8-5d35-42d9-b59c-506d977d8259}</v>
+          <v n="GuidStartVisuInitPouInit">{0ba0b404-5407-4e70-993f-eb8106a11df0}</v>
+          <v n="GuidStartVisuInitPouReInit">{3d97a666-bf06-4d80-adf8-6cf5d4effecb}</v>
+          <v n="GuidVisuGVL0">{7df21db2-b4e7-47a7-9051-e693489bdac2}</v>
+          <v n="GuidVisuGVL1">{253d2e1e-19dd-4cdb-afea-6b19f2ca0aa2}</v>
+          <v n="GuidVisuGVL2">{1d5baa90-2fc9-4cfe-9736-eddc4e9231f8}</v>
+          <v n="GuidVisuGVL_3">{90150115-35be-46b1-ab37-324937c775f3}</v>
+          <v n="GuidReservedPou">{6c05ad4b-f645-4fbf-8195-e13533e79ea6}</v>
+          <v n="GuidVisuGVL3">{692d4747-fc01-4a38-ab34-aeb9768ff919}</v>
+          <v n="GuidReservedPouInit">{8a8419d3-ca16-4ba3-bdca-41fb75e77451}</v>
+          <v n="GuidVisuGVL4">{b7bf8cd0-c655-4f50-998d-5e46fc6b3d2d}</v>
+          <v n="GuidVisuGVL5">{f3f4e5b8-70ad-43fd-8423-4d41ae5f50e0}</v>
+          <v n="GuidLicenseGVL">{126f654a-25a5-47c6-8bcd-b00a7a3dd496}</v>
+          <v n="GuidGlobalClientManagerGVL">{2032312c-41b6-420d-b452-2e7f29a0d9b7}</v>
+          <v n="GuidVisuUserMgmtInitPou">{9fcf9e3a-be31-469f-83a0-cf2c2d3066aa}</v>
+          <v n="GuidVisuUserMgmtInitPouInit">{c88dc218-ea5f-48cd-8f43-6d14c7d9fa97}</v>
+          <v n="GuidBeforeCompileCommonGVL">{e0cd42c0-f4c8-4366-8ffc-97a7ed239aac}</v>
+          <v n="GuidVisuGVL6">{c930f954-1edf-4ad6-9ef7-40f48bf6a040}</v>
+          <v n="GuidReservedPouMethod1">{e5e07d66-94a5-43aa-b5d7-613f7b3f8888}</v>
+          <v n="GuidReservedPouReInit">{dfb00b24-e86b-4bbe-b2fd-161f411d9250}</v>
+          <v n="GuidReservedPouMethod0">{09434eb8-9ee5-4ded-9404-f4f529e67605}</v>
+          <v n="GuidReservedPouMethod2">{57f5a1f8-c67d-4479-9a07-d89faabf1219}</v>
+        </o>
+      </Data>
+      <TypeList>
+        <Type n="Boolean">System.Boolean</Type>
+        <Type n="CaseInsensitiveHashtable">{7df88604-7ac5-4e36-91c4-55e4fdad3e68}</Type>
+        <Type n="GenericFbDescription">{40d6dd8d-dfd0-493a-8e29-c9a35e1e6539}</Type>
+        <Type n="Guid">System.Guid</Type>
+        <Type n="HotkeyConfiguration">{6b108d46-58af-4e41-a3f4-174d8f160cc4}</Type>
+        <Type n="Int32">System.Int32</Type>
+        <Type n="Int64">System.Int64</Type>
+        <Type n="String">System.String</Type>
+        <Type n="UnicodeSupport">{19611221-ebd3-4607-86d2-9822fbe84c30}</Type>
+        <Type n="VisualClientSizeMode">{c37fe731-4f69-4d98-82fe-4f9aefbe200d}</Type>
+        <Type n="VisualizationTargetProperties">{997fedbb-1888-4256-b61c-2933d8056bfd}</Type>
+        <Type n="VisualManagerObject">{4d3fdb8f-ab50-4c35-9d3a-d4bb9bb9a628}</Type>
+        <Type n="VisualManagerViewSettings">{ec9b2ec6-92a2-4856-be72-7866fb274c64}</Type>
+      </TypeList>
+    </XmlArchive>
+  </VisuManager>
+</TcPlcObject>
